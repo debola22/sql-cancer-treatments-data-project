@@ -1,7 +1,9 @@
+-- Total rows and distinct IDs
 SELECT COUNT(*) AS total_rows,
      COUNT(DISTINCT patient_id) AS distinct_patients_ids
 FROM cancer_patients_raw;
 
+-- Missing Values
 SELECT (country IS NULL OR country = '') AS null_country,
 SUM(age IS NULL) AS null_age,
 SUM(gender IS NULL OR gender = '') AS null_gender,
@@ -12,26 +14,31 @@ SUM(annual_income_usd IS NULL) AS null_income
 FROM cancer_patients_raw
 GROUP BY country;
 
+-- Gender breakdown
 SELECT gender, COUNT(*) AS n, ROUND(100.0*COUNT(*)/(SELECT COUNT(*) FROM cancer_patients_raw),2) AS pct
 FROM cancer_patients_raw
 GROUP BY gender;
 
+-- Top cancer types
 SELECT cancer_type, COUNT(*) AS n
 FROM cancer_patients_raw
 GROUP BY cancer_type
 ORDER BY n DESC 
 LIMIT 10;
 
+-- Stage distribution
 SELECT stage, COUNT(*) AS n 
 FROM cancer_patients_raw
 GROUP BY stage
 ORDER BY n DESC;
 
+-- Recovery Rate overall
 SELECT SUM(
 CASE WHEN recovery_status = 'Recovered' THEN 1 ELSE 0 END
 )*100.0/COUNT(*) AS recovery_pct
 FROM cancer_patients_raw;
 
+-- Recovery rate by cancer type
 SELECT cancer_type,
 	COUNT(*) AS total,
 	SUM(CASE WHEN recovery_status = 'Recovered' THEN 1 ELSE 0 END) AS recovered,
@@ -40,20 +47,23 @@ FROM cancer_patients_raw
 GROUP BY  cancer_type
 ORDER BY total DESC;
 
+-- Average treatment duration by recovery status
 SELECT recovery_status, AVG(treatment_duration_days) AS avg_duration, COUNT(*) AS n
 FROM cancer_patients_raw
 GROUP BY recovery_status;
 
+-- Income summary and outliers
 SELECT MIN(annual_income_usd) AS min_income, AVG(annual_income_usd) AS mean_income,
        STDDEV(annual_income_usd) AS sd_income, MAX(annual_income_usd) AS max_income
 FROM cancer_patients_raw;
 
+-- Patients per year (time trend)
 SELECT *
 FROM cancer_patients_raw
 WHERE annual_income_usd > (SELECT AVG(annual_income_usd) + 3*STDDEV(annual_income_usd) FROM cancer_patients_raw)
    OR annual_income_usd < (SELECT AVG(annual_income_usd) - 3*STDDEV(annual_income_usd) FROM cancer_patients_raw);
    
-   
+   -- Number of treatments per year
 SELECT YEAR(treatment_start_date) AS year, COUNT(*) AS n
 FROM cancer_patients_raw
 GROUP BY year 
