@@ -25,11 +25,12 @@ Hormone therapy had the highest recovery success rate among the treatment type.
 The average treatment duration was 140 days.
 
 ## INCOME INSIGHTS
-The median income was 29,908.
-No outliers found.
+- The median income was 29,908.
+- No outliers found.
 
 ## PROJECT LIMITATIONS
-The dataset did not fully represent many Africans countries.
+- The dataset did not fully represent many Africans countries.
+  
 
 See full SQL code: /sql_scripts/eda_queries.sql
 
