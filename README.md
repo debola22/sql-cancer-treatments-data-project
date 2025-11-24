@@ -50,4 +50,6 @@ All SQL queries used for cleaning:
   - How to clean real-world data
   - How to write SQL queries for insight discovery
   - How to structure a project like a professional data analyst
+ 
+    See the full summary: [outputs/summary_of_findings.md](outputs/summary_of_findings.md)
   - How to use GitHub for portfolio documentation
